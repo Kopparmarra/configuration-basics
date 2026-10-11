@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Configuration Basics · ILS / IPS Trainer v3.9</title>
+<style>
+:root{--bg:#eef3f4;--paper:#fff;--panel:#f7f9fa;--line:#d5dfe3;--ink:#102b39;--muted:#607382;--magenta:#a20f50;--magenta-dark:#850d42;--magenta-pale:#faeaf2;--green:#087747;--green-dark:#064a34;--green-pale:#e5f3eb;--orange:#e7b36d;--orange-pale:#fff3e4;--red:#a83f47;--red-pale:#fae9ea}
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(135deg,#f3f5f7,#eaf1f2);font-family:"Segoe UI",Tahoma,Arial,sans-serif;color:var(--ink);font-size:15px;line-height:1.48}
+button,select,textarea,input{font:inherit}button{cursor:pointer}
+.header{min-height:112px;background:linear-gradient(100deg,#fff 0%,#f7f8fa 70%,#e4ecef 100%);border-bottom:1px solid #d6dfe3;display:flex;align-items:center;padding:18px max(22px,calc((100vw - 1480px)/2));gap:15px;position:relative}
+.logo-icon{width:46px;height:46px;border:9px solid var(--magenta);color:transparent;display:grid;place-items:center;font-size:0;flex:none;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%)}
+.logo{font-weight:750;font-size:23px;letter-spacing:-.035em;white-space:nowrap}
+.version{margin-left:0;color:var(--muted);font-size:13px;align-self:flex-end;margin-bottom:7px}
+.progress{height:5px;background:#d3dce0}
+.progress-fill{height:100%;width:0;background:linear-gradient(90deg,var(--magenta),var(--green));transition:width .25s}
+.container{width:min(920px,calc(100% - 36px));margin:24px auto 34px}
+.topline{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:13px;color:var(--muted);font-size:12px}
+.stepcount{font-weight:700;color:var(--green)}
+h1{font-size:34px;line-height:1.15;margin:0 0 8px;font-weight:750;letter-spacing:-.035em}
+.intro{font-size:16px;color:#344d5d;margin:0 0 22px;max-width:850px}
+.workspace{background:#fff;border:1px solid var(--line);border-radius:11px;box-shadow:0 2px 8px #17374a08;display:block;overflow:hidden}
+.taskhead{padding:20px 24px 17px;border:0;border-bottom:1px solid var(--line);background:#fff}
+.kicker{font-size:13px;font-weight:750;letter-spacing:.06em;color:var(--magenta);text-transform:uppercase;margin-bottom:8px}
+.taskhead h2{font-size:29px;line-height:1.2;margin:0;font-weight:750;letter-spacing:-.025em}
+.taskbody{padding:22px 24px;display:block;max-width:100%}
+.lesson,.explain,.baseline-list,.compare,.diagram,.question,.options,.hint,.feedback,.actions,.details,.scenario,.label,select,textarea,#ncrForm,.finish{min-width:0}
+.lesson{border:1px solid var(--line);border-radius:10px;background:#fff;padding:20px;margin:0 0 16px;box-shadow:0 2px 8px #17374a08}
+.lesson h3{font-size:18px;margin:0 0 9px;color:var(--ink)}
+.lesson p{font-size:15px;color:#304858;margin:7px 0}
+.lesson ul{font-size:14px;color:#304858;margin:9px 0 0;padding-left:20px}
+.lesson li{margin:5px 0}
+.step-tag{display:inline-block;font-size:12px;font-weight:750;letter-spacing:.06em;text-transform:uppercase;color:var(--green);background:var(--green-pale);border-radius:5px;padding:5px 9px;margin-bottom:10px}
+.explain{background:var(--magenta-pale);border:0;border-radius:10px;border-left:5px solid var(--magenta);padding:16px 18px;margin-bottom:16px;font-size:15px;color:#44304a}
+.explain strong{color:var(--magenta-dark)}
+.question{font-size:18px;font-weight:750;margin:0 0 13px}
+.options{display:grid;gap:8px;margin-bottom:14px}
+.option{width:100%;display:flex;align-items:flex-start;text-align:left;gap:10px;background:#fff;border:1px solid var(--line);border-radius:8px;padding:14px 13px;color:var(--ink);transition:border-color .15s,background .15s}
+.option:hover{background:#fcf5f8;border-color:#d89ab7}
+.option.selected{background:#f8e7ef;border:2px solid var(--magenta);padding:13px 12px}
+.radio{width:15px;height:15px;border:1px solid #91a0a8;border-radius:50%;margin-top:3px;flex:none;background:#fff}
+.option.selected .radio{border:4px solid var(--magenta)}
+.option b{display:block;font-size:15px;font-weight:750}
+.option small{display:block;color:var(--muted);font-size:13px;margin-top:3px}
+.hint{font-size:13px;color:#4f627a;background:#f7f9fa;border:1px solid var(--line);border-radius:7px;padding:12px 14px;margin:12px 0}
+.feedback{display:none;padding:14px 15px;font-size:14px;margin:12px 0;border-radius:8px;border:1px solid}
+.feedback.show{display:block}
+.feedback.good{background:var(--green-pale);border-color:#b7d9c5;color:#145b3a}
+.feedback.try{background:var(--orange-pale);border-color:#e8c89f;color:#7c4c1e}
+.actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:18px}
+.btn{border:1px solid #d6a0ba;border-radius:8px;background:#fff7fa;color:var(--magenta-dark);padding:11px 17px;font-size:14px;font-weight:750}
+.btn.primary{background:var(--green-dark);border-color:var(--green-dark);color:#fff}
+.btn.orange{background:var(--magenta);border-color:var(--magenta);color:#fff}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.textbutton{background:transparent;border:0;color:var(--magenta);padding:7px 0;font-size:13px;text-decoration:underline}
+.details{margin-top:14px;border-top:1px solid var(--line);padding-top:12px}
+details summary{cursor:pointer;color:#52657b;font-size:13px}
+details p{font-size:13px;color:var(--muted);margin:8px 0 0}
+.diagram{width:100%;max-width:510px;height:auto;display:block;margin:2px auto 8px}
+.baseline-list{border:1px solid var(--line);border-radius:8px;margin:14px 0;overflow:hidden;background:#fff}
+.baseline-row{display:flex;justify-content:space-between;gap:10px;padding:10px 13px;border-bottom:1px solid #dce4e7;font-size:14px}
+.baseline-row:last-child{border-bottom:0}
+.effectivity-strip{border:1px solid #c6d8d0;border-left:5px solid var(--green);border-radius:8px;background:linear-gradient(90deg,#e8f5ed,#f8fbf9);padding:14px 16px;margin:16px 0 18px}
+.effectivity-strip h3{font-size:16px;margin:0 0 10px;color:var(--green-dark)}
+.effectivity-rule{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;padding:9px 0;border-top:1px solid #cbded3}
+.effectivity-rule:first-of-type{border-top:0}
+.effectivity-rule strong{font-size:14px}
+.effectivity-rule span{font-size:14px;font-weight:750;color:var(--green-dark)}
+@media(max-width:480px){.effectivity-rule{grid-template-columns:1fr;gap:2px}}
+.status{font-size:12px;font-weight:750;padding:4px 8px;border-radius:5px;background:#e7edf0;color:#526176;white-space:nowrap}
+.status.locked{background:var(--green-pale);color:var(--green-dark)}
+.status.changed{background:var(--orange-pale);color:#8b521b}
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0 15px}
+.comparebox{border:1px solid #cbded3;border-radius:8px;padding:15px;background:#f3faf6}
+.comparebox.physical{border-color:#e8c6d6;background:#fff6fa}
+.comparebox h3{font-size:14px;margin:0 0 9px}
+.comparebox p{font-size:13px;margin:5px 0}
+.label{display:block;font-size:13px;font-weight:750;margin:12px 0 5px}
+select,textarea{width:100%;padding:11px;border:1px solid #cbd8dd;border-radius:7px;background:#fff;color:var(--ink)}
+textarea{min-height:70px;resize:vertical}
+.finish{text-align:center;padding:30px 20px;background:#fff;border:1px solid var(--line);border-radius:11px}
+.finish .tick{font-size:36px;color:var(--green)}
+.finish h2{font-size:25px;margin:8px 0}
+.finish p{font-size:15px;color:var(--muted);max-width:620px;margin:0 auto 18px}
+.footer{color:#7b8797;font-size:12px;text-align:center;margin-top:18px}
+.hidden{display:none!important}
+@media(max-width:900px){.header{flex-wrap:wrap;min-height:auto;padding:16px 22px}.version{margin-left:auto}.container{width:calc(100% - 28px);margin-top:18px}.taskhead h2{font-size:25px}.taskbody{padding:18px}}
+@media(max-width:600px){.logo{font-size:18px}.logo-icon{width:37px;height:37px;border-width:7px}.version{width:100%;margin:0 0 0 52px}.container{width:calc(100% - 20px)}h1{font-size:27px}.taskbody{display:block}.lesson{padding:17px}.compare{grid-template-columns:1fr}.topline{align-items:flex-start}}
+
+.theory-corner{margin:0 0 16px;background:#f5faf7;border:1px solid #c8e3d4;border-left:4px solid var(--green);border-radius:9px;overflow:hidden}
+.theory-corner summary{display:flex;align-items:center;gap:10px;padding:11px 14px;cursor:pointer;list-style:none}
+.theory-corner summary::-webkit-details-marker{display:none}
+.theory-corner summary:focus-visible{outline:3px solid var(--magenta);outline-offset:2px;border-radius:6px}
+.theory-summary-icon{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:#dcefe3;color:#246744;font-weight:800}
+.theory-corner summary strong{display:block;font-size:14px;color:var(--ink)}
+.theory-corner summary small{display:block;margin-top:2px;font-size:12px;color:var(--muted)}
+.theory-chevron{margin-left:auto;font-size:22px;line-height:1;color:var(--green)}
+.theory-corner[open] .theory-chevron{transform:rotate(45deg)}
+.theory-content{padding:0 14px 14px}
+.theory-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.theory-item{background:#fff;border:1px solid #dce9e2;border-radius:8px;padding:12px}
+.theory-item h3{font-size:14px;margin:0 0 7px;color:var(--ink)}
+.theory-item p{font-size:13px;line-height:1.5;margin:0;color:var(--text)}
+@media(max-width:760px){.theory-grid{grid-template-columns:1fr}}
+
+.task-theory{padding:10px 12px;background:#f7f4f8;border-left:3px solid var(--magenta);border-radius:5px;font-size:13px;line-height:1.5}
+</style>
+</head>
+<body>
+<header class="header">
+  <div class="logo-icon">C</div><div><div class="logo">Configuration Basics</div><div style="font-size:14px;color:#526777;letter-spacing:.08em">AN INTERACTIVE INTRODUCTION TO CONFIGURATION MANAGEMENT</div></div><div class="version">DroneX · TRAINING SYSTEM</div>
+</header>
+<div class="progress"><div class="progress-fill" id="progressFill"></div></div>
+<main class="container">
+  <div class="topline"><span>DRONEX · GUIDAD ÖVNING</span><span class="stepcount" id="stepCount">Steg 1 av 5</span></div>
+  <h1 id="pageTitle">Skapa en godkänd referens</h1>
+  <p class="intro" id="pageIntro">Du hjälper till att konfigurera en DroneX-spaningsdrönare. Vi tar en sak i taget.</p>
+
+  <section class="workspace" id="workspace">
+    <div class="taskhead"><div class="kicker" id="kicker">Uppdrag 1 · Förstå baseline</div><h2 id="taskTitle">Vad ska frysas?</h2></div>
+
+
+    <details class="theory-corner">
+      <summary>
+        <span class="theory-summary-icon">?</span>
+        <span><strong>CM Theory Corner</strong><small>Slå upp begrepp vid behov</small></span>
+        <span class="theory-chevron" aria-hidden="true">+</span>
+      </summary>
+      <div class="theory-content">
+        <div class="theory-grid">
+          <article class="theory-item">
+            <h3>Configuration Item (CI)</h3>
+            <p>Ett identifierat objekt som hanteras under konfigurationsstyrning, till exempel en kamera, en flight controller eller en teknisk datamodul.</p>
+          </article>
+          <article class="theory-item">
+            <h3>Baseline</h3>
+            <p>En formellt godkänd referens för en bestämd konfiguration. Ändringar ska styras och spåras mot referensen, inte göras informellt.</p>
+          </article>
+          <article class="theory-item">
+            <h3>FCA och PCA</h3>
+            <p><b>FCA (Functional Configuration Audit)</b> kontrollerar att funktioner och prestanda motsvarar kraven. <b>PCA (Physical Configuration Audit)</b> kontrollerar att den fysiska produkten stämmer med godkänd produktkonfiguration.</p>
+          </article>
+        </div>
+      </div>
+    </details>
+
+    <div class="taskbody" id="taskBody"></div>
+    </div>
+  </section>
+  <div class="footer">Configuration Basics · ILS / IPS Trainer · v3.9</div>
+</main>
+<script>
+const steps = [
+ {title:"Skapa en godkänd referens",intro:"Du hjälper till att konfigurera en DroneX-spaningsdrönare. Vi tar en sak i taget.",kicker:"Uppdrag 1 · Förstå baseline",task:"Vad ska frysas?"},
+ {title:"Frys konfigurationen",intro:"Komponenterna är granskade. Nu gör du den godkända konfigurationen till en fast referens.",kicker:"Uppdrag 2 · Product Baseline",task:"Frys Product Baseline PB-01"},
+ {title:"Styr en ändring",intro:"EC-017 föreslår Kamera B. Du behöver kontrollera beslutet, dess tillämplighet och den nya referensen.",kicker:"Uppdrag 3 · Change control & effectivity",task:"Vilka individer omfattas av EC-017?"},
+ {title:"Verifiera konfigurationen",intro:"Gör en Physical Configuration Audit (PCA): jämför fysisk produkt med godkänd konfiguration för rätt serienummer.",kicker:"Uppdrag 4 · PCA",task:"Stämmer konfigurationen?"},
+ {title:"Registrera avvikelsen",intro:"Du har hittat en skillnad. Registrera den och föreslå en disposition.",kicker:"Uppdrag 5 · NCR",task:"Vad bör hända härnäst?"}
+];
+let step=0,selected=null,correct=false,pcaPassed=false,docPassed=false;
+const $=id=>document.getElementById(id);
+function setProgress(){ $("progressFill").style.width=(step/steps.length*100)+"%"; $("stepCount").textContent=`Steg ${Math.min(step+1,steps.length)} av ${steps.length}`;}
+function resetAnswer(){selected=null;correct=false;const feedback=$("feedback");if(feedback){feedback.className="feedback";feedback.textContent="";}const checkBtn=$("checkBtn");if(checkBtn)checkBtn.disabled=true;const nextBtn=$("nextBtn");if(nextBtn)nextBtn.disabled=true;}
+function showStep(n){
+ step=n;selected=null;correct=false;pcaPassed=false;docPassed=false;setProgress();$("pageTitle").textContent=steps[n].title;$("pageIntro").textContent=steps[n].intro;$("kicker").textContent=steps[n].kicker;$("taskTitle").textContent=steps[n].task;
+ const body=$("taskBody");
+ if(n===0){body.innerHTML=step0();wireOptions("product","Rätt. Product Baseline identifierar den godkända produktkonfigurationen. Functional beskriver funktioner och prestandakrav; Allocated visar hur kraven fördelas till delsystem och konfigurationsobjekt.");}
+ if(n===1){body.innerHTML=step1();$("freezeBtn").addEventListener("click",()=>{$("freezeResult").classList.remove("hidden");$("freezeResult").classList.add("show");$("freezeBtn").disabled=true;$("freezeBtn").textContent="Baseline fryst";$("nextBtn").disabled=false;});$("nextBtn").addEventListener("click",()=>showStep(2));}
+ if(n===2){body.innerHTML=step2();wireEffectivityScenarios();}
+ if(n===3){body.innerHTML=step3();wirePcaQuestion();wireDocumentationQuestion();const pcaNext=$("nextBtn");pcaNext.disabled=true;pcaNext.onclick=()=>{if(pcaPassed && docPassed)showStep(4);};}
+ if(n===4){body.innerHTML=step4();const disposition=$("disposition");const registerNcrBtn=$("registerNcrBtn");disposition.addEventListener("change",()=>{registerNcrBtn.disabled=!disposition.value;});$("ncrForm").addEventListener("submit",e=>{e.preventDefault();const choice=disposition.value;if(!choice)return;const messages={rework:"Rimlig disposition: återställ Kamera A så att SN 1003 överensstämmer med PB-01. Åtgärden ska dokumenteras och verifieras.",useasis:"Use-as-is kan vara aktuellt, men får inte självbeslutas här. Det kräver formellt godkännande enligt processen, exempelvis av CCB, och eventuell uppdatering av baseline/dokumentation.",repair:"Bedöm vad som faktiskt är fel. Om avvikelsen är att fel kamera monterats är rework normalt tydligare än en generell repair-disposition.",scrap:"Scrap framstår som oproportionerligt för en kamera som kan återställas till godkänd konfiguration. Motivera kassation med säkerhet, skada eller ekonomi och följ godkännandeprocessen."};$("ncrResult").classList.remove("hidden");$("ncrResult").classList.add("show");$("ncrResultText").textContent=messages[choice];$("nextBtn").disabled=false;});$("nextBtn").addEventListener("click",()=>showFinish());}
+ window.scrollTo(0,0);
+}
+function step0(){return `<div class="lesson"><div class="step-tag">Först · Grundbegreppet</div><h3>Vad är Configuration Management?</h3><p>Configuration Management (CM) hjälper en organisation att veta <b>vad produkten består av</b>, vilken version som är godkänd och hur ändringar ska styras.</p><p>I övningen följer du en DroneX från godkänd konfiguration till ändring och verifiering.</p><ul><li><b>Identifiera:</b> beskriv vad som ingår.</li><li><b>Styr ändringar:</b> ändra inte en godkänd konfiguration informellt.</li><li><b>Verifiera:</b> jämför produkten med den godkända referensen.</li></ul></div><div class="explain"><strong>Baseline</strong> är en godkänd referens för en bestämd produktkonfiguration.</div><div class="lesson"><div class="step-tag">Kolla här först · använd som uppslagsruta</div><h3>Tre baselinettyper att känna till</h3><p><b>Functional Baseline</b> – systemets godkända funktioner och prestandakrav.</p><p><b>Allocated Baseline</b> – hur krav fördelas till delsystem och konfigurationsobjekt.</p><p><b>Product Baseline</b> – den godkända produktkonfigurationen, inklusive komponenter, versioner och dokumentation.</p><p><b>Du behöver inte memorera detta.</b> Använd beskrivningarna som uppslagsruta och gå upp och läs igen när du vill.</p></div><p class="question">Vilken baseline identifierar den godkända produktkonfigurationen?</p><div class="options" id="options" role="radiogroup" aria-label="Svarsalternativ"><button class="option" data-value="functional" aria-pressed="false"><span class="radio"></span><span><b>Functional Baseline</b></span></button><button class="option" data-value="allocated" aria-pressed="false"><span class="radio"></span><span><b>Allocated Baseline</b></span></button><button class="option" data-value="product" aria-pressed="false"><span class="radio"></span><span><b>Product Baseline</b></span></button></div><div class="feedback" id="feedback" aria-live="polite"></div><div class="actions"><button class="btn primary" id="checkBtn" disabled>Kontrollera svar</button><button class="btn primary" id="nextBtn" disabled>Nästa →</button></div>`}
+function step1(){return `<div class="lesson"><div class="step-tag">Kunskap innan uppgiften</div><h3>Vad innebär det att frysa en baseline?</h3><p>En baseline är inte bara en lista. Den är en <b>formellt godkänd referens</b> med identifierade komponenter, versioner och dokument.</p><p>När den fryses blir det möjligt att senare avgöra om en ändring är godkänd eller om produkten avviker från beslutet. Att frysa betyder inte att produkten aldrig får ändras – det betyder att ändringar måste styras.</p></div><div class="explain"><strong>Du har identifierat Product Baseline.</strong> Följande komponenter och dokument har godkänts för DroneX Revision A.</div><div class="baseline-list"><div class="baseline-row"><span>Kamera A (EO/IR)</span><span class="status">Rev A</span></div><div class="baseline-row"><span>Datalänk C-band</span><span class="status">Rev A</span></div><div class="baseline-row"><span>Batteripack 6S</span><span class="status">Rev A</span></div><div class="baseline-row"><span>Flight Controller</span><span class="status">v2.1</span></div><div class="baseline-row"><span>Systembeskrivning</span><span class="status">Godkänd</span></div></div><p class="question">Skapa en fast referens för den här konfigurationen.</p><button class="btn orange" id="freezeBtn">❄ Frys baseline PB-01</button><div id="freezeResult" class="feedback good hidden">PB-01 är fryst. Komponenter och dokument omfattas nu av formell change control.</div><div class="actions"><button class="btn primary" id="nextBtn" disabled>Nästa →</button></div>`}
+function step2(){return `<div class="lesson"><div class="step-tag">Kunskap innan uppgiften</div><h3>Från ändringsbegäran till ny baseline</h3><p class="task-theory"><b>Kom ihåg:</b> en godkänd ändring får en bestämd effectivity. Äldre individer fortsätter att följa den baseline som gäller för dem.</p><p>EC-017 föreslår att Kamera A ersätts med Kamera B. Förslaget ska granskas och godkännas enligt change-control-processen innan det blir gällande.</p><p>När ändringen godkänts skapas en ny referens, <b>PB-02</b>. PB-01 finns kvar som historisk baseline och fortsätter att gälla för individer som inte omfattas av EC-017.</p><p><b>Effectivity</b> anger vilka individer som får ändringen. I det här exemplet gäller EC-017 från serienummer 1005.</p></div><div class="explain"><strong>Beslut i simuleringen:</strong> EC-017 är godkänd av change control. PB-02 innehåller Kamera B från SN 1005 och senare. PB-01 gäller fortsatt för SN 1001–1004.</div><div class="effectivity-strip"><h3>Effectivity · vilken konfiguration gäller?</h3><div class="effectivity-rule"><strong>SN 1001–1004</strong><span>PB-01 · Kamera A</span></div><div class="effectivity-rule"><strong>SN 1005 och högre</strong><span>PB-02 · Kamera B</span></div></div><div class="baseline-list"><div class="baseline-row"><span>PB-01 · ursprunglig baseline</span><span class="status">Kamera A</span></div><div class="baseline-row"><span>EC-017 · godkänd ändring</span><span class="status locked">SN ≥ 1005</span></div><div class="baseline-row"><span>PB-02 · ny baseline</span><span class="status locked">Kamera B från SN 1005</span></div></div><p class="question">Vilken kamera ska respektive individ ha enligt beslutet?</p><div class="scenario"><b>Scenario A:</b> DroneX SN 1003</div><div class="options" id="optionsA" role="radiogroup" aria-label="Svar för serienummer 1003"><button class="option" data-value="a" aria-pressed="false"><span class="radio"></span><span><b>Kamera A</b></span></button><button class="option" data-value="b" aria-pressed="false"><span class="radio"></span><span><b>Kamera B</b></span></button></div><div class="feedback" id="feedbackA" aria-live="polite"></div><div class="scenario" style="margin-top:18px"><b>Scenario B:</b> DroneX SN 1006</div><div class="options" id="optionsB" role="radiogroup" aria-label="Svar för serienummer 1006"><button class="option" data-value="a" aria-pressed="false"><span class="radio"></span><span><b>Kamera A</b></span></button><button class="option" data-value="b" aria-pressed="false"><span class="radio"></span><span><b>Kamera B</b></span></button></div><div class="feedback" id="feedbackB" aria-live="polite"></div><div class="actions"><button class="btn primary" id="nextBtn" disabled>Fortsätt till PCA →</button></div>`}
+function step3(){return `<div class="lesson"><div class="step-tag">Kunskap innan uppgiften</div><h3>Physical Configuration Audit (PCA)</h3><p class="task-theory"><b>Kom ihåg:</b> kontrollera serienumret först, välj sedan gällande baseline och jämför den med den fysiska installationen.</p><p>En PCA kontrollerar att den fysiska produkten stämmer med den godkända konfigurationen för just den individen. Börja med serienumret, fastställ vilken baseline och vilka ändringar som gäller och jämför sedan komponenterna.</p><p>Tekniska publikationer behöver också följa ändringen. Berörda datamoduler ska identifieras och få rätt applicability så att rätt instruktion visas för rätt produktvariant.</p></div><div class="explain">Inspektionen är genomförd. Serienummer och installerad kamera har registrerats. Jämför uppgifterna med PB-01, PB-02 och effectivity för EC-017.</div><div class="compare"><div class="comparebox physical"><h3>Inspektionsfall A · SN 1003</h3><p>Installerad kamera: <b>Kamera B</b></p><p>Gällande baseline: PB-01 (Kamera A)</p></div><div class="comparebox physical"><h3>Inspektionsfall B · SN 1006</h3><p>Installerad kamera: <b>Kamera B</b></p><p>Gällande baseline: PB-02</p></div></div><p class="question">Vilket påstående beskriver resultaten av PCA?</p><div class="options" id="options" role="radiogroup" aria-label="PCA-resultat"><button class="option" data-value="bothmatch" aria-pressed="false"><span class="radio"></span><span><b>Båda konfigurationerna stämmer</b><small>SN 1003 enligt PB-01 och SN 1006 enligt PB-02.</small></span></button><button class="option" data-value="firstmismatch" aria-pressed="false"><span class="radio"></span><span><b>SN 1003 avviker</b><small>Kamera B är installerad trots att PB-01 anger Kamera A.</small></span></button><button class="option" data-value="secondmismatch" aria-pressed="false"><span class="radio"></span><span><b>SN 1006 avviker</b><small>Kamera B är inte godkänd på den här individen.</small></span></button></div><div class="feedback" id="feedback" aria-live="polite"></div><div class="lesson" style="margin-top:18px;border-top:4px solid var(--green)"><div class="step-tag">Deluppgift B · Teknisk dokumentation</div><h3>Dokumentation och applicability</h3><p>EC-017 påverkar inte bara hårdvarulistan. Anta att dessa datamoduler finns i den tekniska publikationen:</p><div class="baseline-list"><div class="baseline-row"><span>DM-DX-120 · Byta kamera</span><span class="status">SN ≥ 1001</span></div><div class="baseline-row"><span>DM-DX-245 · Kalibrera Kamera B</span><span class="status locked">SN ≥ 1005</span></div></div><p class="question">Deluppgift B: Vilken datamodul ska tillämpas för SN 1006 efter EC-017?</p><div class="options" id="dmOptions" role="radiogroup" aria-label="Val av datamodul"><button class="option" data-value="dm120" aria-pressed="false"><span class="radio"></span><span><b>DM-DX-120</b></span></button><button class="option" data-value="dm245" aria-pressed="false"><span class="radio"></span><span><b>DM-DX-245</b></span></button></div><div class="feedback" id="dmFeedback" aria-live="polite"></div></div><div class="actions"><button class="btn primary" id="nextBtn">Registrera eventuell avvikelse →</button></div>`}
+function step4(){return `<div class="lesson"><div class="step-tag">Kunskap innan uppgiften</div><h3>Vad är en NCR?</h3><p class="task-theory"><b>Kom ihåg:</b> beskriv vad som faktiskt observerats, vad som skulle gälla och vilken skillnad som upptäckts. Föreslagen disposition är inte samma sak som godkännande.</p><p>En NCR (Non-Conformance Report) dokumenterar att något inte överensstämmer med krav eller godkänd konfiguration.</p><p>En <b>disposition</b> är ett förslag på hur avvikelsen ska hanteras – inte ett godkännande. Att behålla en avvikelse (Use-as-is) kräver formellt beslut via CCB eller organisationens motsvarande process.</p></div><div class="explain">NCR dokumenterar skillnaden mellan godkänd och faktisk konfiguration. En disposition föreslår hur avvikelsen ska hanteras; den ska godkännas enligt organisationens process.</div><form id="ncrForm"><label class="label">NCR-nummer</label><input value="NCR-0042" disabled><label class="label">Avvikelse</label><textarea>SN 1003 har Kamera B installerad. Godkänd konfiguration anger Kamera A och EC-017 gäller först från SN 1005.</textarea><label class="label">Föreslagen disposition</label><select id="disposition" required><option value="" selected disabled>Välj disposition …</option><option value="rework">Rework – byt tillbaka till Kamera A</option><option value="useasis">Use-as-is – behåll Kamera B efter formellt godkännande</option><option value="repair">Repair – annan godkänd åtgärd</option><option value="scrap">Scrap – kassera enheten</option></select><div class="actions"><button class="btn orange" id="registerNcrBtn" type="submit" disabled>Registrera NCR</button></div></form><div id="ncrResult" class="feedback good hidden" aria-live="polite"><b>NCR-0042 registrerad i simuleringen.</b><br>Föreslagen disposition: <span id="ncrResultText"></span></div><div class="actions"><button class="btn primary" id="nextBtn" disabled>Avsluta →</button></div>`}
+function wireOptions(answer,goodText,bindOwnNext=true){
+ const options=$("options");
+ const checkBtn=$("checkBtn");
+ const nextBtn=$("nextBtn");
+ const feedback=$("feedback");
+ // Bind only the direct answer buttons in this question; nested knowledge checks
+ // (such as the S1000D applicability question) must remain independent.
+ [...options.children].filter(el=>el.classList.contains("option")).forEach(b=>b.addEventListener("click",()=>{
+  selected=b.dataset.value;
+  if(step===3){pcaPassed=false;correct=false;}
+  [...options.children].filter(el=>el.classList.contains("option")).forEach(x=>{x.classList.toggle("selected",x===b);x.setAttribute("aria-pressed",x===b?"true":"false");});
+  if(checkBtn)checkBtn.disabled=false;
+  if(nextBtn && step!==3)nextBtn.disabled=true;
+  if(feedback){feedback.className="feedback";feedback.textContent="";}
+ }));
+ if(checkBtn)checkBtn.addEventListener("click",()=>{
+  correct=selected===answer;
+  if(step===3){pcaPassed=correct;correct=correct;}
+  if(feedback){feedback.className="feedback show "+(correct?"good":"try");feedback.textContent=correct?goodText:"Inte riktigt. Kontrollera vilken baseline och vilka ändringsbeslut som gäller för individen.";}
+  if(nextBtn){
+   if(step===3)nextBtn.disabled=false;
+   else nextBtn.disabled=!correct;
+  }
+ });
+ if(bindOwnNext && nextBtn && checkBtn)nextBtn.addEventListener("click",()=>showStep(step+1));
+}
+function wireEffectivityScenarios(){
+ const answers={optionsA:"a",optionsB:"b"},done={optionsA:false,optionsB:false};
+ const texts={optionsA:"Rätt. SN 1003 ligger före effectivity-gränsen och behåller Kamera A enligt PB-01.",optionsB:"Rätt. SN 1006 omfattas av EC-017 och ska ha Kamera B enligt PB-02."};
+ for(const id of ["optionsA","optionsB"]){
+  const box=$(id);
+  box.querySelectorAll(".option").forEach(b=>b.addEventListener("click",()=>{
+   box.querySelectorAll(".option").forEach(x=>{x.classList.toggle("selected",x===b);x.setAttribute("aria-pressed",x===b?"true":"false");});
+   const fb=$(id==="optionsA"?"feedbackA":"feedbackB");const good=b.dataset.value===answers[id];
+   fb.className="feedback show "+(good?"good":"try");fb.textContent=good?texts[id]:"Titta på serienumret och jämför det med gränsen SN 1005.";
+   done[id]=good;$("nextBtn").disabled=!(done.optionsA&&done.optionsB);
+  }));
+ }
+ $("nextBtn").addEventListener("click",()=>showStep(3));
+}
+function wirePcaQuestion(){
+ const box=$("options");
+ box.querySelectorAll(".option").forEach(b=>b.addEventListener("click",()=>{
+  box.querySelectorAll(".option").forEach(x=>{x.classList.toggle("selected",x===b);x.setAttribute("aria-pressed",x===b?"true":"false");});
+  const good=b.dataset.value==="firstmismatch";
+  pcaPassed=good;
+  const fb=$("feedback");
+  fb.className="feedback show "+(good?"good":"try");
+  fb.textContent=good
+   ?"Rätt. SN 1003 avviker: PB-01 anger Kamera A men Kamera B är installerad. SN 1006 stämmer med PB-02."
+   :"Börja med SN 1003: vilket intervall omfattar serienumret, och vilken kamera anger den baselinen? Jämför sedan SN 1006 med PB-02. Du kan läsa effectivity-raden ovan igen.";
+  $("nextBtn").disabled=!(pcaPassed && docPassed);
+ }));
+}
+function wireDocumentationQuestion(){
+ const box=$("dmOptions");
+ box.querySelectorAll(".option").forEach(b=>b.addEventListener("click",()=>{
+  box.querySelectorAll(".option").forEach(x=>{x.classList.toggle("selected",x===b);x.setAttribute("aria-pressed",x===b?"true":"false");});
+  const good=b.dataset.value==="dm245";
+  docPassed=good;
+  const fb=$("dmFeedback");
+  fb.className="feedback show "+(good?"good":"try");
+  fb.textContent=good
+   ?"Rätt. DM-DX-245 gäller från SN 1005, så SN 1006 omfattas. Applicability gör att rätt instruktion visas för rätt produktvariant."
+   :"Titta på applicability-gränsen bredvid datamodulerna: SN 1006 är högre än 1005. Vilken modul har applicability från SN ≥ 1005 och innehåller instruktionen för Kamera B?";
+  $("nextBtn").disabled=!(pcaPassed && docPassed);
+ }));
+}
+function showFinish(){
+ $("progressFill").style.width="100%";$("stepCount").textContent="Klart";
+ $("pageTitle").textContent="Bra jobbat";$("pageIntro").textContent="Du har gått igenom ett enkelt CM-flöde från baseline till avvikelse.";
+ $("workspace").innerHTML=`<div class="finish"><div class="tick">✓</div><h2>Övningen är slutförd</h2><p>Du har identifierat Product Baseline, fryst PB-01, använt effectivity, upptäckt en avvikelse och registrerat en NCR.</p><div class="lesson" style="text-align:left;max-width:560px;margin:0 auto 18px"><h3>Det viktiga att ta med sig</h3><ul><li>En baseline är den godkända referensen.</li><li>Change control avgör när en ändring blir godkänd och vilken effectivity den får.</li><li>PCA jämför den fysiska individen med rätt baseline.</li><li>Avvikelser dokumenteras i NCR; dispositionen måste hanteras enligt beslutad process.</li></ul></div><button class="btn primary" id="restartBtn">Börja om</button></div>`;
+ $("restartBtn").addEventListener("click",()=>window.location.reload());
+}
+showStep(0);
+</script>
+</body>
+</html>
