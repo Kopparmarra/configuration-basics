@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Configuration Basics · ILS / IPS Trainer v3.9</title>
+<title>Configuration Basics · Configuration Management Learning App v4.1</title>
 <style>
 :root{--bg:#eef3f4;--paper:#fff;--panel:#f7f9fa;--line:#d5dfe3;--ink:#102b39;--muted:#607382;--magenta:#a20f50;--magenta-dark:#850d42;--magenta-pale:#faeaf2;--green:#087747;--green-dark:#064a34;--green-pale:#e5f3eb;--orange:#e7b36d;--orange-pale:#fff3e4;--red:#a83f47;--red-pale:#fae9ea}
 *{box-sizing:border-box}
@@ -105,6 +105,73 @@ textarea{min-height:70px;resize:vertical}
 @media(max-width:760px){.theory-grid{grid-template-columns:1fr}}
 
 .task-theory{padding:10px 12px;background:#f7f4f8;border-left:3px solid var(--magenta);border-radius:5px;font-size:13px;line-height:1.5}
+
+/* v4.1: compact Windows-style technical UI; retain magenta and green identity */
+ :root{--bg:#e9edf2;--paper:#fff;--panel:#f3f5f7;--line:#c6cdd5;--ink:#243746;--muted:#5d6b78;--magenta:#a20f50;--magenta-dark:#850d42;--magenta-pale:#faeaf2;--green:#087747;--green-dark:#064a34;--green-pale:#e5f3eb;}
+body{background:#e9edf2;font-size:14px;line-height:1.45}
+.header{min-height:72px;background:linear-gradient(#fff,#f1f3f6);border-bottom:2px solid #c6cdd5;padding:10px max(20px,calc((100vw - 1200px)/2));gap:12px}
+.logo-icon{width:34px;height:34px;border-width:6px;border-color:var(--magenta)}
+.logo{font-size:20px;font-weight:700;letter-spacing:-.025em}
+.header [style*="font-size:14px"]{font-size:11px!important;letter-spacing:.06em!important;color:#657783!important}
+.version{font-size:11px;margin-bottom:4px}
+.progress{height:3px;background:#e2e7ea}
+.progress-fill{background:var(--green);transition:width .2s}
+.container{width:min(880px,calc(100% - 32px));margin:20px auto 28px}
+.topline{font-size:11px;margin-bottom:10px}
+h1{font-size:27px;line-height:1.22;font-weight:700;letter-spacing:-.025em;margin-bottom:6px}
+.intro{font-size:14px;line-height:1.5;margin-bottom:16px;color:#526674}
+.workspace{border-radius:3px;box-shadow:0 1px 2px #26374610}
+.taskhead{padding:13px 18px 12px;border-bottom:1px solid var(--line);background:#f7f8fa}
+.kicker{font-size:11px;letter-spacing:.035em;margin-bottom:5px;color:var(--magenta)}
+.taskhead h2{font-size:22px;line-height:1.25;font-weight:700;letter-spacing:-.02em}
+.taskbody{padding:17px 19px}
+.lesson{padding:15px;margin-bottom:13px;border-radius:3px;box-shadow:none}
+.lesson h3{font-size:16px;margin-bottom:7px}
+.lesson p{font-size:14px;margin:6px 0}
+.lesson ul{font-size:13px}
+.step-tag{font-size:10px;padding:4px 7px;margin-bottom:8px;border-radius:4px}
+.explain{padding:12px 14px;margin-bottom:13px;font-size:14px;border-left-width:3px;border-radius:6px}
+.question{font-size:16px;margin-bottom:10px}
+.option{border-radius:3px;padding:11px 12px}
+.option.selected{padding:10px 11px;background:var(--magenta-pale)}
+.option b{font-size:14px}
+.option small{font-size:12px}
+.hint,.feedback{font-size:13px;padding:10px 12px;border-radius:6px}
+.btn{font-size:13px;padding:8px 13px;border-radius:3px}
+.btn.primary{background:var(--green-dark);border-color:var(--green-dark)}
+.btn.orange{background:var(--magenta);border-color:var(--magenta)}
+.theory-corner{border-radius:3px;margin-bottom:13px;background:#f2f8f4;border-color:#c8e3d4;border-left-width:3px}
+.theory-corner summary{padding:9px 12px}
+.theory-summary-icon{width:23px;height:23px;background:#dcefe3;color:var(--green-dark)}
+.theory-summary-icon{font-size:12px}
+.theory-corner summary strong{font-size:13px}
+.theory-corner summary small{font-size:11px}
+.theory-chevron{font-size:19px;color:var(--green)}
+.theory-content{padding:0 12px 12px}
+.theory-grid{gap:8px}
+.theory-item{padding:10px;border-radius:6px}
+.theory-item h3{font-size:13px}
+.theory-item p{font-size:12px}
+.task-theory{font-size:12px;padding:9px 11px;border-left-width:2px}
+.baseline-list,.comparebox,.effectivity-strip,.finish{border-radius:3px;box-shadow:none}
+.baseline-row{font-size:13px;padding:9px 11px}
+.effectivity-strip{padding:11px 13px;margin:13px 0 15px;background:#f3f7f4}
+.effectivity-strip h3{font-size:14px}
+.effectivity-rule{padding:7px 0}
+.effectivity-rule strong,.effectivity-rule span{font-size:13px}
+.comparebox{padding:12px}
+.comparebox h3{font-size:13px}
+.comparebox p{font-size:12px}
+.label{font-size:12px}
+select,textarea{padding:9px;border-radius:6px;font-size:14px}
+.finish{padding:24px 18px}
+.finish .tick{font-size:30px}
+.finish h2{font-size:21px}
+.finish p{font-size:14px}
+.footer{font-size:11px;margin-top:14px}
+@media(max-width:900px){.header{padding:12px 18px}.container{margin-top:16px}.taskhead h2{font-size:21px}.taskbody{padding:15px}}
+@media(max-width:600px){.logo{font-size:17px}.logo-icon{width:30px;height:30px;border-width:5px}.header [style*="font-size:14px"]{font-size:9px!important}.version{font-size:10px;margin-left:42px}h1{font-size:24px}.taskhead h2{font-size:20px}.taskbody{padding:12px}.lesson{padding:13px}}
+
 </style>
 </head>
 <body>
@@ -148,7 +215,7 @@ textarea{min-height:70px;resize:vertical}
     <div class="taskbody" id="taskBody"></div>
     </div>
   </section>
-  <div class="footer">Configuration Basics · ILS / IPS Trainer · v3.9</div>
+  <div class="footer">Configuration Basics · ILS / IPS Trainer · v4.1</div>
 </main>
 <script>
 const steps = [
